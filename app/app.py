@@ -113,7 +113,7 @@ app_ui = ui.page_fillable(
     ui.layout_sidebar(
         ui.sidebar(
             ui.div(
-                ui.h4("Weighted Random Selection", class_="d-inline"),
+                ui.h4("Weighted Lottery", class_="d-inline"),
                 ui.input_action_button(
                     "reset_btn", "Reset", class_="btn-outline-secondary btn-sm float-end"
                 ),

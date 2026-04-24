@@ -1,4 +1,4 @@
-name: mss-grant-lottery
+name: weighted-lottery
 channels:
   - conda-forge
 dependencies:
