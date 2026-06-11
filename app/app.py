@@ -54,7 +54,6 @@ app_ui = ui.page_fillable(
         fill=True,
         fillable=True,
     ),
-    title="MSS Grant Lottery",
 )
 
 
