@@ -189,7 +189,7 @@ def server(input, output, session):
 
     @render.download(filename="dummy_applicants.xlsx")
     async def example_btn():
-        yield (APP_DIR.parent / "dummy_applicants.xlsx").read_bytes()
+        yield (APP_DIR / "dummy_applicants.xlsx").read_bytes()
 
     @render.download(filename="selected_applicants.txt")
     async def download_btn():
