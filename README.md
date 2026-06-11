@@ -1,6 +1,6 @@
 # MSS Grant Lottery
 
-A web application for running a weighted lottery to select grant applicants. Built with [Shiny for Python](https://shiny.posit.co/py/) and deployed as a static site via [Shinylive](https://shiny.posit.co/py/docs/shinylive.html).
+A web application for running a weighted lottery to select grant applicants using [Probability Proportional to Size (PPS) sampling](https://en.wikipedia.org/wiki/Probability-proportional-to-size_sampling). Built with [Shiny for Python](https://shiny.posit.co/py/) and deployed as a static site via [Shinylive](https://shiny.posit.co/py/docs/shinylive.html).
 
 ## How it works
 
@@ -12,8 +12,8 @@ A web application for running a weighted lottery to select grant applicants. Bui
 
 ## Deployment
 
-The app is automatically exported and deployed to GitLab Pages on every push to `main`.
+The app is automatically exported and deployed to GitHub Pages on every push to `main`.
 
 ## Developed by
 
-Alan Correa & Julia Kowalski — MSS, RWTH Aachen University
+[Alan Correa](https://github.com/thealanjason) — MBD, RWTH Aachen University
