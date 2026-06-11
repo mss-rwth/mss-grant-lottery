@@ -4,7 +4,7 @@ pages:
   stage: deploy
   script:
     - pip install shinylive
-    - shinylive export app public --subdir mss-grant-lottery
+    - shinylive export app public
   artifacts:
     paths:
       - public
