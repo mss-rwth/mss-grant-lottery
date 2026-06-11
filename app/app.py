@@ -4,127 +4,42 @@ import pathlib
 import pandas as pd
 from shiny import App, reactive, render, ui
 
-MBD_BLUE = "#8ebae5"
-MBD_RED = "#f19eb1"
-MBD_YELLOW = "#fabe50"
-RWTH_BLUE = "#00549f"
-
 APP_DIR = pathlib.Path(__file__).parent
-
-CUSTOM_CSS = f"""
-    body, .bslib-page-fill {{
-        background-color: #f4f8fd;
-    }}
-    /* White sidebar with pinned footer */
-    .sidebar {{
-        background-color: #ffffff !important;
-        display: flex !important;
-        flex-direction: column !important;
-        height: 100% !important;
-    }}
-    .sidebar > .sidebar-content {{
-        display: flex !important;
-        flex-direction: column !important;
-        height: 100% !important;
-    }}
-    .sidebar hr {{ margin-top: 0.4rem; margin-bottom: 0.4rem; }}
-    /* Select button */
-    #select_btn {{
-        background-color: {MBD_RED} !important;
-        border-color: {MBD_RED} !important;
-        color: #1a1a1a !important;
-        font-weight: 600;
-    }}
-    #select_btn:hover {{
-        background-color: #e08a9e !important;
-        border-color: #e08a9e !important;
-    }}
-    /* Reset button */
-    #reset_btn {{
-        border-color: {RWTH_BLUE} !important;
-        color: {RWTH_BLUE} !important;
-    }}
-    #reset_btn:hover {{
-        background-color: {RWTH_BLUE} !important;
-        color: white !important;
-    }}
-    /* Download button */
-    #download_btn {{
-        border-color: {MBD_BLUE} !important;
-        color: {MBD_BLUE} !important;
-    }}
-    #download_btn:hover {{
-        background-color: {MBD_BLUE} !important;
-        color: white !important;
-    }}
-    /* Applicants card header */
-    .card-header {{
-        background-color: {MBD_BLUE};
-        color: white;
-        font-weight: 600;
-    }}
-    /* Result card */
-    .result-card .card-header {{
-        background-color: {MBD_YELLOW} !important;
-        color: #1a1a1a !important;
-    }}
-    .result-card {{
-        border-color: {MBD_YELLOW} !important;
-    }}
-    .result-applicant-card {{
-        border-color: {MBD_YELLOW} !important;
-    }}
-    .result-applicant-card .rank {{
-        color: {RWTH_BLUE};
-    }}
-    /* Sidebar footer — pinned to bottom */
-    .sidebar-footer {{
-        margin-top: auto;
-        padding-top: 1rem;
-        border-top: 1px solid #dee2e6;
-        text-align: center;
-        color: #6c757d;
-        font-size: 0.72rem;
-    }}
-    .sidebar-footer img {{
-        max-width: 100%;
-        border-radius: 4px;
-        margin-bottom: 0.5rem;
-    }}
-"""
 
 app_ui = ui.page_fillable(
     ui.tags.head(
-        ui.tags.style(CUSTOM_CSS),
-        ui.tags.script(src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"),
-        ui.tags.script("""
-            $(document).on('shiny:connected', function() {
-                Shiny.addCustomMessageHandler('fire_confetti', function(_) {
-                    confetti({
-                        particleCount: 180,
-                        spread: 90,
-                        origin: { y: 0.55 },
-                        colors: ['#8ebae5', '#f19eb1', '#fabe50', '#00549f']
-                    });
-                });
-            });
-        """),
+        ui.tags.link(rel="stylesheet", href="styles.css"),
+        ui.tags.script(src="confetti.browser.min.js"),
+        ui.tags.script(src="confetti_handler.js"),
     ),
     ui.layout_sidebar(
         ui.sidebar(
             ui.div(
-                ui.h4("Weighted Lottery", class_="d-inline"),
+                ui.h4("MSS Grant Lottery", class_="d-inline"),
                 ui.input_action_button(
                     "reset_btn", "Reset", class_="btn-outline-secondary btn-sm float-end"
                 ),
             ),
-            ui.hr(),
+            ui.p(
+                "In modelling and simulation science, ",
+                ui.tags.a("PPS sampling", href="https://en.wikipedia.org/wiki/Probability-proportional-to-size_sampling", target="_blank"),
+                " selects samples with probabilities proportional to a measure of size or relevance, "
+                "ensuring every unit has a chance of selection. "
+                "We applied the same principle to our travel grants: every eligible application "
+                "entered the draw, while stronger alignment with the programme objectives increased "
+                "the probability of selection.",
+                style="font-size:0.72rem; color:#6c757d; margin-top:0.4rem; margin-bottom:0;",
+            ),
             ui.output_ui("upload_card"),
             ui.output_ui("config_panel"),
             ui.output_ui("lottery_panel"),
             ui.div(
-                ui.tags.img(src="rwth_mbd_bild_rgb.png", style="max-width:100%; border-radius:4px; margin-bottom:0.5rem;"),
-                ui.p("Developed by Alan Correa & Julia Kowalski", style="margin:0; font-size:0.72rem;"),
+                ui.tags.img(src="rwth_mss_bild_rgb.svg", style="max-width:100%; margin-bottom:0.5rem;"),
+                ui.p(
+                    "Developed by ",
+                    ui.tags.a("Alan Correa", href="https://github.com/thealanjason", target="_blank"),
+                    style="margin:0; font-size:0.72rem;",
+                ),
                 class_="sidebar-footer",
             ),
             width=340,
@@ -150,7 +65,11 @@ def server(input, output, session):
     @render.ui
     def upload_card():
         reset_counter()  # dependency forces re-render on reset, clearing the file input
-        return ui.input_file("file", "Upload Excel file (.xlsx / .xls)", accept=[".xlsx", ".xls"])
+        return ui.div(
+            ui.hr(),
+            ui.input_file("file", "Upload Applicant Data (.xlsx / .xls)", accept=[".xlsx", ".xls"]),
+            ui.download_button("example_btn", "Download example", class_="btn-link btn-sm p-0 example-download"),
+        )
 
     @reactive.effect
     @reactive.event(input.reset_btn)
@@ -180,15 +99,12 @@ def server(input, output, session):
             return ui.div()
         cols = data.columns.tolist()
         return ui.div(
-            ui.hr(),
-            ui.input_select("name_col", "Applicant name column", choices=cols, selected=cols[0]),
-            ui.input_select("score_col", "Score (weight) column", choices=cols, selected=cols[-1]),
-            ui.input_select(
-                "n_select",
-                "Number of applicants to select",
-                choices=[str(i) for i in range(1, 11)],
-                selected="1",
+            ui.div(
+                ui.div(ui.input_select("name_col", "Name column", choices=cols, selected=cols[0]), style="flex:1;"),
+                ui.div(ui.input_select("score_col", "Score column", choices=cols, selected=cols[-1]), style="flex:1;"),
+                style="display:flex; gap:0.5rem;",
             ),
+            class_="settings-panel",
         )
 
     @render.ui
@@ -196,10 +112,16 @@ def server(input, output, session):
         if df() is None:
             return ui.div()
         return ui.div(
+            ui.hr(),
+            ui.input_select(
+                "n_select",
+                "Number of applicants to select",
+                choices=[str(i) for i in range(1, 11)],
+                selected="1",
+            ),
             ui.input_action_button(
                 "select_btn", "Select Applicant(s)", class_="btn-primary w-100 mt-2"
             ),
-            ui.output_ui("download_panel"),
         )
 
     @render.data_frame
@@ -207,7 +129,7 @@ def server(input, output, session):
         data = df()
         if data is None:
             return pd.DataFrame()
-        return data
+        return render.DataGrid(data, width="100%")
 
     @reactive.effect
     @reactive.event(input.select_btn)
@@ -241,30 +163,32 @@ def server(input, output, session):
         applicant_cards = [
             ui.card(
                 ui.card_body(
-                    ui.p(f"#{i + 1}", class_="rank mb-1 small fw-bold"),
-                    ui.tags.strong(str(name)),
+                    ui.div(ui.tags.strong(str(name))),
+                    ui.p(f"#{i + 1}", class_="rank fw-bold"),
                 ),
                 class_="result-applicant-card",
             )
             for i, name in enumerate(names)
         ]
         return ui.card(
-            ui.card_header(ui.tags.strong("Selected Applicant(s)")),
+            ui.card_header(
+                ui.div(
+                    ui.tags.strong("Selected Applicant(s)"),
+                    ui.download_button("download_btn", "Download (.txt)", class_="btn-sm ms-2"),
+                    style="display:flex; align-items:center;",
+                )
+            ),
             ui.div(
                 *applicant_cards,
-                style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 140px)); gap: 0.75rem; padding: 0.75rem;",
+                style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 0.75rem; padding: 0.75rem;",
             ),
             class_="result-card shadow",
             fill=False,
         )
 
-    @render.ui
-    def download_panel():
-        if selected_names() is None:
-            return ui.div()
-        return ui.download_button(
-            "download_btn", "Download Result (.txt)", class_="btn-outline-primary w-100 mt-2"
-        )
+    @render.download(filename="dummy_applicants.xlsx")
+    async def example_btn():
+        yield (APP_DIR.parent / "dummy_applicants.xlsx").read_bytes()
 
     @render.download(filename="selected_applicants.txt")
     async def download_btn():
@@ -279,7 +203,7 @@ def _weighted_sample_without_replacement(population, weights, k):
     wts = list(weights)
     selected = []
     for _ in range(k):
-        (chosen_pos,) = random.choices(range(len(indices)), weights=wts, k=1)
+        chosen_pos = random.choices(range(len(indices)), weights=wts, k=1)[0]
         selected.append(population[indices[chosen_pos]])
         indices.pop(chosen_pos)
         wts.pop(chosen_pos)

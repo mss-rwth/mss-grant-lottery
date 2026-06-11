@@ -1,0 +1,209 @@
+:root {
+    /* MSS palette */
+    --mss-1: #bfd0d1; /* light teal */
+    --mss-2: #c7ddf2; /* light blue */
+    --mss-3: #407fb7; /* mid blue */
+    --mss-4: #8ebae5; /* soft blue */
+    --mss-5: #b8d698; /* light green */
+    --mss-6: #00549f; /* RWTH dark blue */
+    --mss-7: #57ab27; /* green */
+    --mss-8: #636566; /* grey */
+
+}
+
+body, .bslib-page-fill {
+    background-color: #f4f8fd;
+}
+
+/* White sidebar with pinned footer */
+.sidebar {
+    background-color: #ffffff !important;
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+}
+.sidebar > .sidebar-content {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+}
+.sidebar hr { margin-top: 0.4rem; margin-bottom: 0.4rem; }
+
+/* Number of applicants dropdown */
+#n_select {
+    border-color: var(--mss-6) !important;
+    border-width: 2px !important;
+    font-weight: 600;
+    color: var(--mss-6) !important;
+}
+
+/* Select button */
+#select_btn {
+    background-color: var(--mss-7) !important;
+    border-color: var(--mss-7) !important;
+    color: #ffffff !important;
+    font-weight: 600;
+}
+#select_btn:hover {
+    background-color: color-mix(in srgb, var(--mss-7) 80%, black) !important;
+    border-color: color-mix(in srgb, var(--mss-7) 80%, black) !important;
+}
+
+/* Reset button */
+#reset_btn {
+    border-color: var(--mss-6) !important;
+    color: var(--mss-6) !important;
+}
+#reset_btn:hover {
+    background-color: var(--mss-6) !important;
+    color: white !important;
+}
+
+/* Download button */
+#download_btn {
+    background-color: var(--mss-6) !important;
+    border-color: var(--mss-6) !important;
+    color: white !important;
+}
+#download_btn:hover {
+    background-color: var(--mss-3) !important;
+    border-color: var(--mss-3) !important;
+}
+
+/* Applicants table full width */
+.shiny-data-frame, .shiny-data-frame > div {
+    width: 100% !important;
+}
+
+/* Applicants card header */
+.card-header {
+    background-color: var(--mss-4);
+    color: white;
+    font-weight: 600;
+}
+
+/* Result card */
+.result-card .card-header {
+    background-color: var(--mss-5) !important;
+    color: #1a1a1a !important;
+}
+.result-card {
+    border-color: var(--mss-5) !important;
+    min-height: fit-content;
+    height: auto !important;
+    flex-shrink: 0 !important;
+}
+.result-applicant-card {
+    border-color: var(--mss-5) !important;
+    height: 7.5rem;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+.result-applicant-card .card-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0.6rem 0.75rem;
+}
+.result-applicant-card .rank {
+    color: var(--mss-6);
+    font-size: 1.4rem;
+    margin-bottom: 0;
+    line-height: 1.2;
+}
+
+/* Settings panel */
+.settings-panel {
+    font-size: 0.72rem;
+    margin-top: 0.2rem;
+    margin-bottom: 0.2rem;
+}
+.settings-panel .form-label {
+    margin-bottom: 0.1rem;
+}
+.settings-panel .form-select {
+    font-size: 0.72rem;
+    padding: 0.15rem 0.4rem;
+}
+.settings-panel .shiny-input-container {
+    margin-bottom: 0 !important;
+    margin-top: 0 !important;
+}
+
+/* Example download link */
+.example-download {
+    font-size: 0.72rem;
+    display: block;
+    margin-top: 0.1rem;
+    text-align: left;
+    padding-left: 0 !important;
+}
+.example-download:hover {
+    background-color: transparent !important;
+}
+
+/* Remove spacing around file input container */
+.shiny-input-container:has(.btn-file) {
+    margin-bottom: 0 !important;
+    margin-top: 0 !important;
+}
+#upload_card {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+/* File input — full-width browse button, no text field */
+.shiny-input-container .input-group {
+    display: block !important;
+}
+.shiny-input-container .input-group > .form-control {
+    display: none !important;
+}
+.shiny-input-container .input-group-btn {
+    width: 100% !important;
+    display: block !important;
+}
+.btn-file {
+    width: 100% !important;
+    text-align: center;
+    border-radius: 0 !important;
+    background-color: #c8c9ca !important;
+    border-color: #c8c9ca !important;
+    color: white !important;
+}
+.btn-file:hover {
+    background-color: var(--mss-8) !important;
+    border-color: var(--mss-8) !important;
+}
+
+/* File upload progress bar — shown above browse button */
+.shiny-input-container:has(.shiny-file-input-progress) {
+    display: flex;
+    flex-direction: column;
+}
+.shiny-input-container .form-label { order: 1; }
+.shiny-file-input-progress { order: 2; }
+.shiny-input-container .input-group { order: 3; }
+.shiny-file-input-progress,
+.shiny-file-input-progress .progress-bar {
+    border-radius: 0 !important;
+}
+.shiny-file-input-progress .progress-bar {
+    background-color: var(--mss-4) !important;
+}
+
+/* Sidebar footer — pinned to bottom */
+.sidebar-footer {
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid #dee2e6;
+    text-align: center;
+    color: #6c757d;
+    font-size: 0.72rem;
+}
+.sidebar-footer img {
+    max-width: 100%;
+    margin-bottom: 0.5rem;
+}
