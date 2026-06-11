@@ -8,6 +8,7 @@ APP_DIR = pathlib.Path(__file__).parent
 
 app_ui = ui.page_fillable(
     ui.tags.head(
+        ui.tags.title("MSS Grant Lottery"),
         ui.tags.link(rel="stylesheet", href="styles.css"),
         ui.tags.script(src="confetti.browser.min.js"),
         ui.tags.script(src="confetti_handler.js"),
