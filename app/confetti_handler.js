@@ -1,9 +1,3 @@
-if ('serviceWorker' in navigator && !navigator.serviceWorker.controller) {
-    navigator.serviceWorker.addEventListener('controllerchange', function() {
-        window.location.reload();
-    });
-}
-
 $(document).on('shiny:connected', function() {
     Shiny.addCustomMessageHandler('fire_confetti', function(_) {
         const colors = [...Array(20).keys()].map(i => getComputedStyle(document.documentElement).getPropertyValue(`--mss-${i+1}`).trim()).filter(Boolean);
