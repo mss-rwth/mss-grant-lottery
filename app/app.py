@@ -21,13 +21,12 @@ app_ui = ui.page_fillable(
                 ),
             ),
             ui.p(
-                "In modelling and simulation science, ",
-                ui.tags.a("PPS sampling", href="https://en.wikipedia.org/wiki/Probability-proportional-to-size_sampling", target="_blank"),
-                " selects samples with probabilities proportional to a measure of size or relevance, "
-                "ensuring every unit has a chance of selection. "
-                "We applied the same principle to our travel grants: every eligible application "
-                "entered the draw, while stronger alignment with the programme objectives increased "
-                "the probability of selection.",
+                "In modeling and simulation sciences, ",
+                ui.tags.a("importance sampling", href="https://en.wikipedia.org/wiki/Importance_sampling", target="_blank"),
+                " increases the probability of drawing informative samples without excluding the "
+                "rest of the population. Inspired by that same idea, our travel grant lottery gives "
+                "every eligible applicant a place in the draw, while stronger alignment with the "
+                "programme objectives increases their odds of selection.",
                 style="font-size:0.72rem; color:#6c757d; margin-top:0.4rem; margin-bottom:0;",
             ),
             ui.output_ui("upload_card"),
@@ -143,11 +142,8 @@ def server(input, output, session):
         n = min(int(input.n_select()), len(data))
         weights = data[score_col].tolist()
 
-        if any(w < 0 for w in weights):
-            ui.notification_show("Scores must be non-negative.", type="error")
-            return
-        if sum(weights) == 0:
-            ui.notification_show("At least one score must be greater than zero.", type="error")
+        if any(w <= 0 for w in weights):
+            ui.notification_show("All scores must be greater than zero.", type="error")
             return
 
         names = data[name_col].tolist()
