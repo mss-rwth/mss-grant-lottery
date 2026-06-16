@@ -6,6 +6,7 @@ dependencies:
   - pandas
   - openpyxl
   - shiny
+  - pytest
   - pip
   - pip:
       - shinylive

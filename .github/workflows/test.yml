@@ -1,0 +1,24 @@
+name: Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: mamba-org/setup-micromamba@v1
+        with:
+          environment-file: environment.yml
+          environment-name: weighted-lottery
+          init-shell: bash
+          cache-environment: true
+
+      - name: Run tests
+        shell: bash -el {0}
+        run: pytest tests/
