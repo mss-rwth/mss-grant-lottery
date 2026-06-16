@@ -2,7 +2,9 @@
 
 [![Tests](https://github.com/mss-rwth/mss-grant-lottery/actions/workflows/test.yml/badge.svg)](https://github.com/mss-rwth/mss-grant-lottery/actions/workflows/test.yml)
 
-A web application for a weighted lottery to select grant applicants, inspired by the idea behind [importance sampling](https://en.wikipedia.org/wiki/Importance_sampling): every eligible applicant has a place in the draw, while stronger alignment with the programme objectives increases an applicant's odds of selection. Built with [Shiny for Python](https://shiny.posit.co/py/) and deployed as a static site via [Shinylive](https://shiny.posit.co/py/docs/shinylive.html).
+A web application for a weighted lottery to select grant applicants, inspired by the idea behind [importance sampling](https://en.wikipedia.org/wiki/Importance_sampling): every eligible applicant has a place in the draw, while stronger alignment with the programme objectives increases an applicant's odds of selection. 
+
+Built with [Shiny for Python](https://shiny.posit.co/py/) and deployed as a static site via [Shinylive](https://shiny.posit.co/py/docs/shinylive.html).
 
 ## How it works
 
